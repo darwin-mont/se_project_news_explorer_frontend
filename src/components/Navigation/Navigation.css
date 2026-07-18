@@ -1,0 +1,189 @@
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navigation_dark {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.navigation__logo {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  font-family: 'Roboto Slab', serif;
+  transition: opacity 0.3s;
+}
+
+.navigation__logo:hover {
+  opacity: 0.8;
+}
+
+.navigation__logo_dark {
+  color: #1a1a1a;
+}
+
+.navigation__list {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation__item {
+  display: flex;
+  align-items: center;
+}
+
+.navigation__link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  padding: 13px 0;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.navigation__link:hover {
+  color: #fff;
+}
+
+.navigation__link_active {
+  color: #fff;
+  border-bottom-color: #fff;
+  padding: 24px 0px;
+}
+
+.navigation__link_dark {
+  color: rgba(26, 26, 26, 0.7);
+}
+
+.navigation__link_dark:hover {
+  color: #1a1a1a;
+}
+
+.navigation__link_dark.navigation__link_active {
+  color: #1a1a1a;
+  border-bottom-color: #1a1a1a;
+}
+
+.navigation__button {
+  width: 176px;
+  height: 48px;
+  padding: 0px 30px;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+  font-family: 'Roboto Slab', serif;
+  border: 1px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.navigation__button_login {
+  background: transparent;
+  color: #fff;
+}
+
+.navigation__button_login:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.02);
+}
+
+.navigation__button_logout {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  justify-content: center;
+}
+
+.navigation__button_logout:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+.navigation__button_dark {
+  background: transparent;
+  color: #1a1a1a;
+  border: 1px solid rgba(26, 26, 26, 0.3);
+  justify-content: center;
+}
+
+.navigation__button_dark:hover {
+  background: rgba(26, 26, 26, 0.05);
+  border-color: #1a1a1a;
+}
+
+/* ✅ Keep username and icon properly aligned */
+.navigation__button_logout .navigation__username,
+.navigation__button_dark .navigation__username {
+  display: inline-block;
+}
+
+.navigation__logout-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+  flex-shrink: 0; /* ✅ Prevent icon from shrinking */
+}
+
+.navigation__username {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.navigation__logout-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.navigation__button_logout:hover .navigation__logout-icon {
+  transform: rotate(90deg);
+}
+
+.navigation__button_dark:hover .navigation__logout-icon {
+  transform: rotate(90deg);
+}
+
+/* ✅ Dark mode icon color filter */
+.navigation__button_dark .navigation__logout-icon {
+  filter: brightness(0) saturate(100%) invert(0);
+}
+
+.navigation__button_logout .navigation__logout-icon {
+  filter: brightness(0) saturate(100%) invert(1);
+}
+@media (max-width: 768px) {
+  .navigation__list {
+    gap: 1rem;
+  }
+
+  .navigation__logo {
+    font-size: 1.2rem;
+  }
+  .navigation__button {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .navigation__logout-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

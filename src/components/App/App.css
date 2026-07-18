@@ -1,0 +1,15 @@
+/* src/components/App/App.css */
+.app {
+  width: 100%;
+  max-width: 1440px; /* ✅ Max width */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f6f7;
+  margin: 0 auto; /* ✅ Center */
+}
+
+.app main {
+  background-color: #f5f6f7;
+  width: 100%;
+}

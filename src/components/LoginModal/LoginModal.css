@@ -1,0 +1,60 @@
+/* src/components/LoginModal/LoginModal.css */
+.login-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-modal__label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.login-modal__input {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  background: #ffffff;
+}
+
+.login-modal__input:focus {
+  outline: none;
+  border-color: #2f71e5;
+  box-shadow: 0 0 0 3px rgba(47, 113, 229, 0.1);
+}
+
+.login-modal__input::placeholder {
+  color: #bbb;
+}
+
+.login-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.login-modal__footer-text {
+  color: #666;
+}
+
+.login-modal__switch-button {
+  background: none;
+  border: none;
+  color: #2f71e5;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem 0.5rem;
+  transition: color 0.3s;
+}
+
+.login-modal__switch-button:hover {
+  color: #347eff;
+  text-decoration: underline;
+}

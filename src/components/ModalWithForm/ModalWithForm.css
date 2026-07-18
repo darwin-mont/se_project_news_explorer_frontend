@@ -1,0 +1,144 @@
+/* src/components/ModalWithForm/ModalWithForm.css */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal__content {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 430px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Close Button */
+.modal__close-button {
+  position: relative;
+  top: -13.5rem;
+  right: -29.5rem;
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  color: #666;
+}
+
+.modal__close-button:hover {
+  color: #1a1a1a;
+  transform: rotate(90deg);
+}
+
+/* Title */
+.modal__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
+}
+
+/* Form */
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Submit Button */
+.modal__submit-button {
+  width: 100%;
+  padding: 0.9rem;
+  background: #2f71e5;
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.modal__submit-button:hover:not(:disabled) {
+  background: #347eff;
+}
+
+.modal__submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Footer */
+.modal__footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Custom scrollbar for modal content */
+.modal__content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal__content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.modal__content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.modal__content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+@media (max-width: 480px) {
+  .modal__content {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+
+  .modal__title {
+    font-size: 1.5rem;
+  }
+}

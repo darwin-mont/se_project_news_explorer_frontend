@@ -1,0 +1,37 @@
+/* src/components/Preloader/Preloader.css - Absolute positioning version */
+.preloader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  position: relative;
+  padding: 2rem 0;
+}
+
+.circle-preloader {
+  display: block;
+  width: 50px;
+  height: 50px;
+  border: 4px solid #444;
+  border-bottom-color: #888;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 0.75s infinite linear;
+}
+
+@keyframes spin {
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.preloader__text {
+  margin-top: 4rem;
+  color: #666;
+  font-size: 1.1rem;
+  text-align: center;
+}
