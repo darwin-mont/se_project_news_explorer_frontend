@@ -1,4 +1,3 @@
-// src/components/NewsCard/NewsCard.jsx
 import React, { useState } from 'react';
 import './NewsCard.css';
 import bookmarkNormal from '../../assets/icons/bookmark-normal.svg';

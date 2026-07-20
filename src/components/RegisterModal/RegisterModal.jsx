@@ -1,4 +1,3 @@
-// src/components/RegisterModal/RegisterModal.jsx
 import React, { useState } from 'react';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import './RegisterModal.css';

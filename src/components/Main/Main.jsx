@@ -1,4 +1,3 @@
-// src/components/Main/Main.jsx
 import React, { useState, useEffect } from 'react';
 import NewsCard from '../NewsCard/NewsCard';
 import About from '../About/About';
@@ -20,20 +19,17 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
 
   const ARTICLES_PER_PAGE = 3;
 
-  // Check API status on mount
   useEffect(() => {
     const status = getApiStatus();
     setApiStatus(status);
   }, []);
 
-  // Listen for search queries from parent (App.jsx)
   useEffect(() => {
     if (searchQuery) {
       handleSearch(searchQuery);
     }
   }, [searchQuery]);
 
-  // Update displayed articles when articles or visibleCount changes
   useEffect(() => {
     if (articles.length > 0) {
       setDisplayedArticles(articles.slice(0, visibleCount));
@@ -42,7 +38,6 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
     }
   }, [articles, visibleCount]);
 
-  // Handle search
   const handleSearch = async (query) => {
     setIsLoading(true);
     setError(null);
@@ -76,7 +71,6 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
     }
   };
 
-  // Handle "Show more" button
   const handleShowMore = () => {
     setVisibleCount((prev) => Math.min(prev + ARTICLES_PER_PAGE, totalArticles));
   };
@@ -91,15 +85,11 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
 
   return (
     <main className="main">
-      {/* Search Results Block */}
       <div className="search-results">
-        {/* Preloader - shows during loading */}
         {isLoading && <Preloader />}
 
-        {/* Results - only show after search and not loading */}
         {!isLoading && hasSearched && (
           <>
-            {/* Error message */}
             {error && (
               <div className="search-results__error">
                 <p>{error}</p>
@@ -120,7 +110,6 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
               </div>
             )}
 
-            {/* Results with articles */}
             {!error && !searchError && articles.length > 0 && (
               <>
                 <h2 className="main__results-title">Search results</h2>
@@ -151,13 +140,9 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
           </>
         )}
 
-        {/* No search performed yet - show nothing */}
-        {!hasSearched && !isLoading && (
-          <div className="search-results__empty">{/* Empty state - no cards shown */}</div>
-        )}
+        {!hasSearched && !isLoading && <div className="search-results__empty"></div>}
       </div>
 
-      {/* About section - always visible */}
       <About />
     </main>
   );

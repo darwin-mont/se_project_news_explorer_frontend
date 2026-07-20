@@ -1,4 +1,3 @@
-// src/components/SuccessModal/SuccessModal.jsx
 import React, { useEffect } from 'react';
 import './SuccessModal.css';
 
@@ -33,7 +32,6 @@ function SuccessModal({ isOpen, onClose, onSignIn }) {
   return (
     <div className="success-modal" onClick={handleOverlayClick}>
       <div className="success-modal__content">
-        {/* Success Icon */}
         <div className="success-modal__icon"></div>
 
         <h2 className="success-modal__title">Registration successfully completed!</h2>

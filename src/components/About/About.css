@@ -1,4 +1,3 @@
-/* src/components/About/About.css */
 .about {
   padding: 4rem 2rem;
   background-color: #ffffff; /* ✅ White background */
@@ -33,6 +32,7 @@
 }
 
 .about__content {
+  text-align: justify;
   padding: 0px 52px;
   margin: 0px 5px;
 }
