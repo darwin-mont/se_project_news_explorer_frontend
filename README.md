@@ -6,9 +6,10 @@ The idea is to give users features to simplify their news search and save functi
 
 ## Stack
 
-We are using for this app the latest Vite version. This we'll help us use up-to-date functions for later improvements
+We are using for this app the latest Vite version. This we'll help us use up-to-date functions for later improvements.
 
 ## Reference
 
-Video pitch [video]
-https://drive.google.com/file/d/1zWFOBPKcu7ROVsTNP2nez06iJlm9cwUC/view?usp=sharing
+Project Pitch Video
+Check out the video here [Video Pitch](https://drive.google.com/file/d/1zWFOBPKcu7ROVsTNP2nez06iJlm9cwUC/view?usp=sharing), where I describe my
+project and some challenges I faced while building it.
