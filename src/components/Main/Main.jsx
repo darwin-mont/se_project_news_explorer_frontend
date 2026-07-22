@@ -28,6 +28,15 @@ function Main({ isLoggedIn, savedArticles, onSaveArticle, searchQuery }) {
     if (searchQuery) {
       handleSearch(searchQuery);
     }
+
+    if (!searchQuery) {
+      setArticles([]);
+      setDisplayedArticles([]);
+      setHasSearched(false);
+      setSearchError('');
+      setError(null);
+      setTotalArticles(0);
+    }
   }, [searchQuery]);
 
   useEffect(() => {

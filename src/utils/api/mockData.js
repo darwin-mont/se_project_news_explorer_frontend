@@ -14,7 +14,7 @@ export const mockArticles = [
       id: 'tech-innovation',
     },
     author: 'Sarah Chen',
-    keyword: 'technology',
+    keyword: 'Technology',
     content: 'Full article content would go here...',
     text: 'Researchers have developed a revolutionary AI model...',
   },
@@ -33,7 +33,7 @@ export const mockArticles = [
       id: 'world-news',
     },
     author: 'Michael Rodriguez',
-    keyword: 'environment',
+    keyword: 'Environment',
     content: 'Full article content would go here...',
     text: 'World leaders have signed a landmark climate agreement...',
   },
@@ -52,7 +52,7 @@ export const mockArticles = [
       id: 'health-science',
     },
     author: 'Dr. Emily Watson',
-    keyword: 'health',
+    keyword: 'Health',
     content: 'Full article content would go here...',
     text: 'A comprehensive 10-year study confirms significant health benefits...',
   },
@@ -71,7 +71,7 @@ export const mockArticles = [
       id: 'space-daily',
     },
     author: 'James Cooper',
-    keyword: 'science',
+    keyword: 'Science',
     content: 'Full article content would go here...',
     text: 'SpaceX successfully deployed 60 new satellites...',
   },
@@ -90,7 +90,7 @@ export const mockArticles = [
       id: 'medical-news',
     },
     author: 'Dr. Lisa Park',
-    keyword: 'health',
+    keyword: 'Health',
     content: 'Full article content would go here...',
     text: 'Scientists have discovered a new immunotherapy treatment...',
   },
@@ -109,7 +109,7 @@ export const mockArticles = [
       id: 'tech-weekly',
     },
     author: 'David Kim',
-    keyword: 'technology',
+    keyword: 'Technology',
     content: 'Full article content would go here...',
     text: 'Major technology companies have agreed to implement new privacy standards...',
   },
@@ -128,7 +128,7 @@ export const mockArticles = [
       id: 'energy-today',
     },
     author: 'Maria Garcia',
-    keyword: 'environment',
+    keyword: 'Environment',
     content: 'Full article content would go here...',
     text: 'Renewable energy sources have generated more electricity than coal...',
   },
@@ -147,20 +147,12 @@ export const mockArticles = [
       id: 'ed-tech',
     },
     author: 'Robert Taylor',
-    keyword: 'education',
+    keyword: 'Education',
     content: 'Full article content would go here...',
     text: 'Schools across the country are adopting virtual reality technology...',
   },
 ];
 
-export const mockUser = {
-  _id: '65f7368dfb74bd6a92114c80',
-  name: 'John Doe',
-  email: 'john@example.com',
-};
+export const mockUser = null;
 
-export const mockSavedArticles = [
-  mockArticles[0], // AI Breakthrough
-  mockArticles[2], // Health Study
-  mockArticles[4], // Cancer Research
-];
+export const mockSavedArticles = [];

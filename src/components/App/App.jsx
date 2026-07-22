@@ -57,6 +57,27 @@ function App() {
     }
   }, []);
 
+  // Clear search results when leaving the home page
+  useEffect(() => {
+    // When navigating away from home page, clear search
+    if (location.pathname !== '/') {
+      setSearchQuery('');
+    }
+  }, [location.pathname]);
+
+  // Clear search results when refreshing the page
+  // This runs on mount and clears any stale search
+  useEffect(() => {
+    // If we're on the home page and there's a search query from previous session, clear it
+    if (location.pathname === '/') {
+      // Only clear if it was a page refresh (performance navigation)
+      const navigationType = performance?.getEntriesByType?.('navigation')?.[0]?.type;
+      if (navigationType === 'reload' || navigationType === 'back_forward') {
+        setSearchQuery('');
+      }
+    }
+  }, []);
+
   const handleLogin = async ({ email, password }) => {
     try {
       setLoading(true);
@@ -68,7 +89,6 @@ function App() {
         setCurrentUser(result.data);
         localStorage.setItem('token', result.token);
         setIsLoginModalOpen(false);
-        // Load saved articles after login
         const articles = await loadSavedArticles();
         console.log('Saved articles loaded after login:', articles);
       }
@@ -92,7 +112,6 @@ function App() {
         localStorage.setItem('token', result.token);
         setIsRegisterModalOpen(false);
         setIsSuccessModalOpen(true);
-
         await loadSavedArticles();
       }
     } catch (error) {
@@ -105,7 +124,6 @@ function App() {
 
   const handleSuccessSignIn = () => {
     setIsSuccessModalOpen(false);
-    // Open the login modal
     setIsLoginModalOpen(true);
   };
 
@@ -116,13 +134,13 @@ function App() {
       setCurrentUser(null);
       setSavedArticles([]);
       localStorage.removeItem('token');
+
       console.log('Logged out');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
-  // src/components/App/App.jsx (excerpt)
   const handleSaveArticle = async (article) => {
     if (!isLoggedIn) {
       setIsLoginModalOpen(true);
@@ -130,7 +148,6 @@ function App() {
     }
 
     try {
-      // Check if already saved by URL
       const isSaved = savedArticles.some((saved) => saved.url === article.url);
 
       if (!isSaved) {
@@ -138,7 +155,6 @@ function App() {
         setSavedArticles((prev) => [...prev, savedArticle]);
         console.log('Article saved:', article.title);
       } else {
-        // Find and remove the article
         const articleToRemove = savedArticles.find((saved) => saved.url === article.url);
         if (articleToRemove) {
           await removeArticle(articleToRemove._id);
@@ -156,13 +172,11 @@ function App() {
     console.log('handleRemoveArticle called with id:', articleId);
     try {
       await removeArticle(articleId);
-      // Immediately update state
       setSavedArticles((prev) => {
         const newList = prev.filter((article) => article._id !== articleId);
         console.log('Updated saved articles (remove):', newList);
         return newList;
       });
-      // Reload to be safe
       await loadSavedArticles();
     } catch (error) {
       console.error('Failed to remove article:', error);
@@ -184,9 +198,11 @@ function App() {
     setIsLoginModalOpen(false);
     setIsRegisterModalOpen(false);
   };
+
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
+
   const totalArticles = savedArticles.length;
 
   return (

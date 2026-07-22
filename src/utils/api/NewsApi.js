@@ -1,4 +1,3 @@
-// src/utils/api/newsApi.js
 import {
   NEWS_API_BASE_URL,
   NEWS_API_KEY,
@@ -20,7 +19,7 @@ const fetchFromNewsApi = async (endpoint, params = {}) => {
   });
 
   try {
-    console.log(`📡 Fetching: ${url.toString()}`);
+    console.log(`Fetching: ${url.toString()}`);
 
     const response = await fetch(url.toString());
 
@@ -37,64 +36,8 @@ const fetchFromNewsApi = async (endpoint, params = {}) => {
 
     return data;
   } catch (error) {
-    console.error('NewsAPI fetch error:', error);
+    console.error(' NewsAPI fetch error:', error);
     throw error;
-  }
-};
-
-// Search for news with proper parameters
-export const searchNews = async (query, params = {}) => {
-  if (!query || query.trim() === '') {
-    throw new Error('Please enter a keyword');
-  }
-
-  if (!NEWS_API_KEY) {
-    console.warn('No API key found, falling back to mock data');
-    return searchNewsMock(query);
-  }
-
-  try {
-    const searchParams = {
-      q: query.trim(),
-      from: getDateSevenDaysAgo(),
-      to: getTodayDate(),
-      pageSize: DEFAULT_PARAMS.pageSize,
-      language: DEFAULT_PARAMS.language,
-      sortBy: DEFAULT_PARAMS.sortBy,
-      apiKey: NEWS_API_KEY,
-      ...params,
-    };
-
-    const data = await fetchFromNewsApi(ENDPOINTS.EVERYTHING, searchParams);
-
-    return {
-      status: 'ok',
-      totalResults: data.totalResults || 0,
-      articles: data.articles
-        ? data.articles.map((article, index) => ({
-            id: index + 1,
-            _id: `news_${Date.now()}_${index}`,
-            title: article.title || 'No title',
-            description: article.description || 'No description available',
-            url: article.url || '#',
-            urlToImage:
-              article.urlToImage ||
-              'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60',
-            publishedAt: article.publishedAt || new Date().toISOString(),
-            source: {
-              name: article.source?.name || 'Unknown Source',
-              id: article.source?.id || 'unknown',
-            },
-            author: article.author || 'Unknown Author',
-            content: article.content || '',
-            keyword: 'search',
-          }))
-        : [],
-    };
-  } catch (error) {
-    console.error('Search API error:', error);
-    console.warn('Falling back to mock data for search');
-    return searchNewsMock(query);
   }
 };
 
@@ -118,7 +61,290 @@ const searchNewsMock = async (query) => {
   };
 };
 
-// Get top headlines
+// Helper function to capitalize first letter
+const capitalizeFirst = (str) => {
+  if (!str) return 'General';
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+// Improved keyword extraction - only returns category names
+const extractKeyword = (article) => {
+  // Valid categories list
+  const validCategories = [
+    'technology',
+    'science',
+    'health',
+    'business',
+    'environment',
+    'entertainment',
+    'sports',
+    'education',
+    'politics',
+    'world',
+    'general',
+  ];
+
+  // Check for existing category fields
+  if (article.category && validCategories.includes(article.category.toLowerCase())) {
+    return capitalizeFirst(article.category);
+  }
+  if (article.section && validCategories.includes(article.section.toLowerCase())) {
+    return capitalizeFirst(article.section);
+  }
+  if (article.keyword && validCategories.includes(article.keyword.toLowerCase())) {
+    return capitalizeFirst(article.keyword);
+  }
+
+  // Check if source has a category
+  if (article.source?.category && validCategories.includes(article.source.category.toLowerCase())) {
+    return capitalizeFirst(article.source.category);
+  }
+
+  // Try to extract from title using category keywords
+  const titleText = article.title?.toLowerCase() || '';
+  const descriptionText = article.description?.toLowerCase() || '';
+  const combinedText = titleText + ' ' + descriptionText;
+
+  const categoryPatterns = [
+    {
+      category: 'Technology',
+      keywords: [
+        'tech',
+        'software',
+        'ai',
+        'digital',
+        'computer',
+        'internet',
+        'app',
+        'code',
+        'programming',
+        'cyber',
+        'data',
+        'robot',
+      ],
+    },
+    {
+      category: 'Science',
+      keywords: [
+        'science',
+        'research',
+        'discovery',
+        'scientist',
+        'lab',
+        'experiment',
+        'space',
+        'nasa',
+        'physics',
+        'biology',
+        'chemistry',
+      ],
+    },
+    {
+      category: 'Health',
+      keywords: [
+        'health',
+        'medical',
+        'doctor',
+        'hospital',
+        'disease',
+        'treatment',
+        'cancer',
+        'heart',
+        'wellness',
+        'fitness',
+        'nutrition',
+      ],
+    },
+    {
+      category: 'Business',
+      keywords: [
+        'business',
+        'economy',
+        'market',
+        'finance',
+        'bank',
+        'invest',
+        'stock',
+        'trade',
+        'company',
+        'profit',
+        'ceo',
+      ],
+    },
+    {
+      category: 'Environment',
+      keywords: [
+        'environment',
+        'climate',
+        'green',
+        'solar',
+        'energy',
+        'renewable',
+        'nature',
+        'wildlife',
+        'pollution',
+        'conservation',
+      ],
+    },
+    {
+      category: 'Entertainment',
+      keywords: [
+        'entertainment',
+        'movie',
+        'music',
+        'film',
+        'celebrity',
+        'show',
+        'hollywood',
+        'netflix',
+        'actor',
+        'singer',
+      ],
+    },
+    {
+      category: 'Sports',
+      keywords: [
+        'sports',
+        'football',
+        'basketball',
+        'soccer',
+        'baseball',
+        'tennis',
+        'golf',
+        'olympic',
+        'nfl',
+        'nba',
+        'athlete',
+      ],
+    },
+    {
+      category: 'Education',
+      keywords: [
+        'education',
+        'school',
+        'university',
+        'student',
+        'teacher',
+        'college',
+        'learn',
+        'curriculum',
+        'academic',
+      ],
+    },
+    {
+      category: 'Politics',
+      keywords: [
+        'politics',
+        'government',
+        'election',
+        'president',
+        'congress',
+        'senate',
+        'policy',
+        'vote',
+      ],
+    },
+    {
+      category: 'World',
+      keywords: ['world', 'global', 'international', 'foreign', 'europe', 'asia', 'africa'],
+    },
+  ];
+
+  for (const pattern of categoryPatterns) {
+    for (const keyword of pattern.keywords) {
+      if (combinedText.includes(keyword)) {
+        return pattern.category;
+      }
+    }
+  }
+
+  // Try using the source name
+  const sourceName = article.source?.name?.toLowerCase() || '';
+  const sourceCategoryMap = {
+    tech: 'Technology',
+    innovation: 'Technology',
+    science: 'Science',
+    health: 'Health',
+    medical: 'Health',
+    business: 'Business',
+    finance: 'Business',
+    economy: 'Business',
+    environment: 'Environment',
+    nature: 'Environment',
+    entertainment: 'Entertainment',
+    sports: 'Sports',
+    education: 'Education',
+    politics: 'Politics',
+    world: 'World',
+  };
+
+  for (const [sourceKeyword, category] of Object.entries(sourceCategoryMap)) {
+    if (sourceName.includes(sourceKeyword)) {
+      return category;
+    }
+  }
+
+  return 'General';
+};
+
+export const searchNews = async (query, params = {}) => {
+  if (!query || query.trim() === '') {
+    throw new Error('Please enter a keyword');
+  }
+
+  if (!NEWS_API_KEY) {
+    console.warn(' No API key found, falling back to mock data');
+    return searchNewsMock(query);
+  }
+
+  try {
+    const searchParams = {
+      q: query.trim(),
+      from: getDateSevenDaysAgo(),
+      to: getTodayDate(),
+      pageSize: DEFAULT_PARAMS.pageSize,
+      language: DEFAULT_PARAMS.language,
+      sortBy: DEFAULT_PARAMS.sortBy,
+      apiKey: NEWS_API_KEY,
+      ...params,
+    };
+
+    const data = await fetchFromNewsApi(ENDPOINTS.EVERYTHING, searchParams);
+
+    return {
+      status: 'ok',
+      totalResults: data.totalResults || 0,
+      articles: data.articles
+        ? data.articles.map((article, index) => {
+            const keyword = extractKeyword(article);
+            return {
+              id: index + 1,
+              _id: `news_${Date.now()}_${index}`,
+              title: article.title || 'No title',
+              description: article.description || 'No description available',
+              url: article.url || '#',
+              urlToImage:
+                article.urlToImage ||
+                'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60',
+              publishedAt: article.publishedAt || new Date().toISOString(),
+              source: {
+                name: article.source?.name || 'Unknown Source',
+                id: article.source?.id || 'unknown',
+              },
+              author: article.author || 'Unknown Author',
+              content: article.content || '',
+              keyword: keyword,
+            };
+          })
+        : [],
+    };
+  } catch (error) {
+    console.error('Search API error:', error);
+    console.warn('Falling back to mock data for search');
+    return searchNewsMock(query);
+  }
+};
+
 export const getTopHeadlines = async (params = {}) => {
   if (!NEWS_API_KEY) {
     console.warn('No API key found, using mock data');
@@ -144,24 +370,27 @@ export const getTopHeadlines = async (params = {}) => {
       status: 'ok',
       totalResults: data.totalResults || 0,
       articles: data.articles
-        ? data.articles.map((article, index) => ({
-            id: index + 1,
-            _id: `news_${Date.now()}_${index}`,
-            title: article.title || 'No title',
-            description: article.description || 'No description available',
-            url: article.url || '#',
-            urlToImage:
-              article.urlToImage ||
-              'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60',
-            publishedAt: article.publishedAt || new Date().toISOString(),
-            source: {
-              name: article.source?.name || 'Unknown Source',
-              id: article.source?.id || 'unknown',
-            },
-            author: article.author || 'Unknown Author',
-            content: article.content || '',
-            keyword: 'headlines',
-          }))
+        ? data.articles.map((article, index) => {
+            const keyword = extractKeyword(article);
+            return {
+              id: index + 1,
+              _id: `news_${Date.now()}_${index}`,
+              title: article.title || 'No title',
+              description: article.description || 'No description available',
+              url: article.url || '#',
+              urlToImage:
+                article.urlToImage ||
+                'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60',
+              publishedAt: article.publishedAt || new Date().toISOString(),
+              source: {
+                name: article.source?.name || 'Unknown Source',
+                id: article.source?.id || 'unknown',
+              },
+              author: article.author || 'Unknown Author',
+              content: article.content || '',
+              keyword: keyword,
+            };
+          })
         : [],
     };
   } catch (error) {
@@ -175,94 +404,19 @@ export const getTopHeadlines = async (params = {}) => {
   }
 };
 
-// ✅ ADD THIS - Get API status
-export const getApiStatus = () => {
+export function getApiStatus() {
   return {
     hasKey: !!NEWS_API_KEY && NEWS_API_KEY !== '',
     keyPreview: NEWS_API_KEY ? `${NEWS_API_KEY.substring(0, 8)}...` : 'No key',
     isUsingRealApi: !!NEWS_API_KEY && NEWS_API_KEY !== '',
     baseUrl: NEWS_API_BASE_URL,
   };
+}
+
+const newsApi = {
+  searchNews,
+  getTopHeadlines,
+  getApiStatus,
 };
 
-// ✅ ADD THIS - Check if real API is configured
-export const isRealApiConfigured = () => {
-  return !!NEWS_API_KEY && NEWS_API_KEY !== '';
-};
-
-// ✅ ADD THIS - Get news by category
-export const getNewsByCategory = async (category, params = {}) => {
-  if (!NEWS_API_KEY) {
-    console.warn('No API key found, using mock data for category');
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    let filtered = mockArticles;
-    if (category && category !== 'all') {
-      const categoryMap = {
-        technology: ['technology', 'tech', 'software', 'ai', 'digital'],
-        science: ['science', 'space', 'research', 'discovery'],
-        health: ['health', 'medical', 'wellness', 'diet'],
-        business: ['business', 'economy', 'finance', 'market'],
-        environment: ['environment', 'climate', 'sustainable', 'green'],
-        entertainment: ['entertainment', 'celebrity', 'movie', 'music'],
-        sports: ['sports', 'athletics', 'game', 'tournament'],
-      };
-      const keywords = categoryMap[category] || [category];
-      filtered = mockArticles.filter((article) => {
-        const text =
-          `${article.title} ${article.description} ${article.keyword || ''}`.toLowerCase();
-        return keywords.some((keyword) => text.includes(keyword));
-      });
-    }
-    return {
-      status: 'ok',
-      totalResults: filtered.length,
-      articles: filtered,
-    };
-  }
-
-  try {
-    const searchParams = {
-      category: category,
-      country: 'us',
-      pageSize: DEFAULT_PARAMS.pageSize,
-      apiKey: NEWS_API_KEY,
-      ...params,
-    };
-
-    const data = await fetchFromNewsApi(ENDPOINTS.TOP_HEADLINES, searchParams);
-
-    return {
-      status: 'ok',
-      totalResults: data.totalResults || 0,
-      articles: data.articles
-        ? data.articles.map((article, index) => ({
-            id: index + 1,
-            _id: `news_${Date.now()}_${index}`,
-            title: article.title || 'No title',
-            description: article.description || 'No description available',
-            url: article.url || '#',
-            urlToImage:
-              article.urlToImage ||
-              'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&auto=format&fit=crop&q=60',
-            publishedAt: article.publishedAt || new Date().toISOString(),
-            source: {
-              name: article.source?.name || 'Unknown Source',
-              id: article.source?.id || 'unknown',
-            },
-            author: article.author || 'Unknown Author',
-            content: article.content || '',
-            keyword: category,
-          }))
-        : [],
-    };
-  } catch (error) {
-    console.error('Category API error:', error);
-    // Fallback to mock data
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return {
-      status: 'ok',
-      totalResults: mockArticles.length,
-      articles: mockArticles,
-    };
-  }
-};
+export default newsApi;

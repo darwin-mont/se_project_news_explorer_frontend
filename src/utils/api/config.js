@@ -1,10 +1,6 @@
 export const BASE_URL = import.meta.env.VITE_API_URL || 'https://newsapi.org/v2';
 export const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 
-// src/utils/api/config.js
-// API Configuration with environment detection
-
-// Determine which API URL to use based on environment
 const isProduction = import.meta.env.PROD || process.env.NODE_ENV === 'production';
 
 // Use the proxy URL in production, direct URL in development

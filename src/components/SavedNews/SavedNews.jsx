@@ -25,7 +25,7 @@ function SavedNews({ savedArticles, currentUser, onRemoveArticle }) {
         </div>
       ) : (
         <div className="saved-news__empty">
-          <p>📭 No saved articles yet.</p>
+          <p>No saved articles yet.</p>
           <p>Start exploring news and save your favorites!</p>
         </div>
       )}

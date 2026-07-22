@@ -1,56 +1,59 @@
-// src/utils/api/api.js - Updated with console logs
 import { mockArticles } from './mockData';
 
+// Simulate API delay
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-let savedArticles = [];
+// Get the current user ID from localStorage
+const getCurrentUserId = () => {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
 
-// Initialize with some test data
-const initializeSavedArticles = () => {
-  if (savedArticles.length === 0) {
-    savedArticles = [
-      {
-        _id: '65f7368dfb74bd6a92114c01',
-        title: 'AI Breakthrough: New Model Achieves Human-Level Understanding',
-        text: 'Researchers have developed a revolutionary AI model...',
-        date: '2026-07-11T10:30:00Z',
-        url: 'https://example.com/ai-breakthrough',
-        image:
-          'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop',
-        source: 'Tech Innovation Today',
-        keyword: 'technology',
-        owner: {
-          _id: '65f7368dfb74bd6a92114c80',
-          name: 'John Doe',
-        },
-        originalArticle: mockArticles[0],
-      },
-      {
-        _id: '65f7368dfb74bd6a92114c02',
-        title: 'New Study Reveals Health Benefits of Plant-Based Diets',
-        text: 'A comprehensive 10-year study confirms significant health benefits...',
-        date: '2026-07-10T22:45:00Z',
-        url: 'https://example.com/health-study',
-        image:
-          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop',
-        source: 'Health Science Journal',
-        keyword: 'health',
-        owner: {
-          _id: '65f7368dfb74bd6a92114c80',
-          name: 'John Doe',
-        },
-        originalArticle: mockArticles[2],
-      },
-    ];
+  // Try to get user data from localStorage
+  try {
+    const userData = localStorage.getItem('user_data_' + token);
+    if (userData) {
+      const user = JSON.parse(userData);
+      return user._id;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+};
+
+// Get saved articles for the current user
+const getSavedArticlesFromStorage = () => {
+  const userId = getCurrentUserId();
+  if (!userId) return [];
+
+  const storageKey = `saved_articles_${userId}`;
+  try {
+    const data = localStorage.getItem(storageKey);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
   }
 };
 
-initializeSavedArticles();
+// Save articles for the current user
+const saveArticlesToStorage = (articles) => {
+  const userId = getCurrentUserId();
+  if (!userId) return;
 
+  const storageKey = `saved_articles_${userId}`;
+  localStorage.setItem(storageKey, JSON.stringify(articles));
+};
+
+// Initialize from localStorage for current user
+let savedArticles = getSavedArticlesFromStorage();
+
+// Get all saved articles for the current user
 export function getItems() {
-  console.log('getItems called, returning:', savedArticles);
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     delay(500).then(() => {
+      // Refresh from localStorage to ensure latest data
+      savedArticles = getSavedArticlesFromStorage();
+
       const formattedArticles = savedArticles.map((article) => ({
         _id: article._id,
         title: article.title || 'Untitled Article',
@@ -59,90 +62,114 @@ export function getItems() {
         url: article.url || '#',
         image: article.image || article.urlToImage || '',
         source: article.source || article.source?.name || 'Unknown Source',
-        keyword: article.keyword || 'general',
-        owner: article.owner || {
-          _id: '65f7368dfb74bd6a92114c80',
-          name: 'John Doe',
-        },
+        keyword: article.keyword || 'General',
         originalArticle: article.originalArticle || article,
       }));
-      console.log('Formatted articles:', formattedArticles);
       resolve(formattedArticles);
     });
   });
 }
 
+// Save an article for the current user
 export function saveArticle(article) {
-  console.log('saveArticle called with:', article);
   return new Promise((resolve, reject) => {
     delay(600).then(() => {
+      // Refresh from localStorage
+      savedArticles = getSavedArticlesFromStorage();
+
       // Check if article already exists
       const exists = savedArticles.some((saved) => saved.url === article.url);
 
       if (exists) {
-        console.log('Article already exists');
         reject(new Error('Article already saved'));
         return;
       }
 
       // Create saved article with _id
       const savedArticle = {
-        _id: '65f7368dfb74bd6a92114c' + Math.floor(Math.random() * 1000) + Date.now(),
+        _id: 'saved_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
         title: article.title || 'Untitled Article',
         text: article.text || article.description || 'No description available',
         date: article.date || article.publishedAt || new Date().toISOString(),
         url: article.url || '#',
         image: article.image || article.urlToImage || '',
         source: article.source || article.source?.name || 'Unknown Source',
-        keyword: article.keyword || 'general',
+        keyword: article.keyword || 'General',
         owner: {
-          _id: '65f7368dfb74bd6a92114c80',
-          name: 'John Doe',
+          _id: getCurrentUserId() || 'unknown',
+          name: 'User',
         },
         originalArticle: article,
       };
 
       savedArticles.push(savedArticle);
-      console.log('Article saved, new list:', savedArticles);
+      saveArticlesToStorage(savedArticles);
       resolve(savedArticle);
     });
   });
 }
 
+//Remove an article for the current user
 export function removeArticle(articleId) {
-  console.log('removeArticle called with id:', articleId);
   return new Promise((resolve, reject) => {
     delay(400).then(() => {
+      // Refresh from localStorage
+      savedArticles = getSavedArticlesFromStorage();
+
       const index = savedArticles.findIndex((article) => article._id === articleId);
 
       if (index === -1) {
-        console.log('Article not found');
         reject(new Error('Article not found'));
         return;
       }
 
-      const removed = savedArticles.splice(index, 1);
-      console.log('Article removed, remaining:', savedArticles);
+      const removed = savedArticles.splice(index, 1)[0];
+      saveArticlesToStorage(savedArticles);
       resolve({
         message: 'Article removed successfully',
-        article: removed[0],
+        article: removed,
       });
     });
   });
 }
 
-// Add a function to get saved articles count
-export function getSavedArticlesCount() {
-  return savedArticles.length;
+// Get a specific article by ID
+export function getArticleById(articleId) {
+  return new Promise((resolve, reject) => {
+    delay(300).then(() => {
+      // Refresh from localStorage
+      savedArticles = getSavedArticlesFromStorage();
+
+      const article = savedArticles.find((article) => article._id === articleId);
+
+      if (!article) {
+        reject(new Error('Article not found'));
+        return;
+      }
+
+      resolve(article);
+    });
+  });
 }
 
-// Add a function to clear all saved articles (for testing)
+// Clear all saved articles for the current user
 export function clearSavedArticles() {
   return new Promise((resolve) => {
     delay(200).then(() => {
       savedArticles = [];
-      console.log('All articles cleared');
+      saveArticlesToStorage(savedArticles);
       resolve({ message: 'All articles cleared' });
     });
   });
+}
+
+// Get count of saved articles for the current user
+export function getSavedArticlesCount() {
+  savedArticles = getSavedArticlesFromStorage();
+  return savedArticles.length;
+}
+
+// Clear saved articles when user logs out
+export function clearUserSavedArticles() {
+  savedArticles = [];
 }
