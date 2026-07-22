@@ -12,18 +12,15 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate registration
     setTimeout(() => {
       onRegister({ email, password, username });
       setIsLoading(false);
-      // Clear form
       setEmail('');
       setPassword('');
       setUsername('');
     }, 500);
   };
 
-  // Handle Enter key to submit form
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
