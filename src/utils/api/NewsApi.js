@@ -8,7 +8,6 @@ import {
 } from './config';
 import { mockArticles } from './mockData';
 
-// Helper function to make API calls
 const fetchFromNewsApi = async (endpoint, params = {}) => {
   const url = new URL(`${NEWS_API_BASE_URL}${endpoint}`);
 
@@ -41,7 +40,6 @@ const fetchFromNewsApi = async (endpoint, params = {}) => {
   }
 };
 
-// Mock search fallback
 const searchNewsMock = async (query) => {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -57,7 +55,10 @@ const searchNewsMock = async (query) => {
   return {
     status: 'ok',
     totalResults: filtered.length,
-    articles: filtered,
+    articles: filtered.map((article) => ({
+      ...article,
+      searchTerm: query.trim(),
+    })),
   };
 };
 
@@ -100,165 +101,6 @@ const extractKeyword = (article) => {
     return capitalizeFirst(article.source.category);
   }
 
-  // Try to extract from title using category keywords
-  const titleText = article.title?.toLowerCase() || '';
-  const descriptionText = article.description?.toLowerCase() || '';
-  const combinedText = titleText + ' ' + descriptionText;
-
-  const categoryPatterns = [
-    {
-      category: 'Technology',
-      keywords: [
-        'tech',
-        'software',
-        'ai',
-        'digital',
-        'computer',
-        'internet',
-        'app',
-        'code',
-        'programming',
-        'cyber',
-        'data',
-        'robot',
-      ],
-    },
-    {
-      category: 'Science',
-      keywords: [
-        'science',
-        'research',
-        'discovery',
-        'scientist',
-        'lab',
-        'experiment',
-        'space',
-        'nasa',
-        'physics',
-        'biology',
-        'chemistry',
-      ],
-    },
-    {
-      category: 'Health',
-      keywords: [
-        'health',
-        'medical',
-        'doctor',
-        'hospital',
-        'disease',
-        'treatment',
-        'cancer',
-        'heart',
-        'wellness',
-        'fitness',
-        'nutrition',
-      ],
-    },
-    {
-      category: 'Business',
-      keywords: [
-        'business',
-        'economy',
-        'market',
-        'finance',
-        'bank',
-        'invest',
-        'stock',
-        'trade',
-        'company',
-        'profit',
-        'ceo',
-      ],
-    },
-    {
-      category: 'Environment',
-      keywords: [
-        'environment',
-        'climate',
-        'green',
-        'solar',
-        'energy',
-        'renewable',
-        'nature',
-        'wildlife',
-        'pollution',
-        'conservation',
-      ],
-    },
-    {
-      category: 'Entertainment',
-      keywords: [
-        'entertainment',
-        'movie',
-        'music',
-        'film',
-        'celebrity',
-        'show',
-        'hollywood',
-        'netflix',
-        'actor',
-        'singer',
-      ],
-    },
-    {
-      category: 'Sports',
-      keywords: [
-        'sports',
-        'football',
-        'basketball',
-        'soccer',
-        'baseball',
-        'tennis',
-        'golf',
-        'olympic',
-        'nfl',
-        'nba',
-        'athlete',
-      ],
-    },
-    {
-      category: 'Education',
-      keywords: [
-        'education',
-        'school',
-        'university',
-        'student',
-        'teacher',
-        'college',
-        'learn',
-        'curriculum',
-        'academic',
-      ],
-    },
-    {
-      category: 'Politics',
-      keywords: [
-        'politics',
-        'government',
-        'election',
-        'president',
-        'congress',
-        'senate',
-        'policy',
-        'vote',
-      ],
-    },
-    {
-      category: 'World',
-      keywords: ['world', 'global', 'international', 'foreign', 'europe', 'asia', 'africa'],
-    },
-  ];
-
-  for (const pattern of categoryPatterns) {
-    for (const keyword of pattern.keywords) {
-      if (combinedText.includes(keyword)) {
-        return pattern.category;
-      }
-    }
-  }
-
-  // Try using the source name
   const sourceName = article.source?.name?.toLowerCase() || '';
   const sourceCategoryMap = {
     tech: 'Technology',
@@ -334,6 +176,7 @@ export const searchNews = async (query, params = {}) => {
               author: article.author || 'Unknown Author',
               content: article.content || '',
               keyword: keyword,
+              searchTerm: query.trim(),
             };
           })
         : [],

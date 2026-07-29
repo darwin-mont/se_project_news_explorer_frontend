@@ -11,6 +11,8 @@
   flex-direction: column;
   position: relative;
   text-align: left;
+  width: 400px;
+  height: 576px;
 }
 
 .news-card:hover {
@@ -48,7 +50,7 @@
   font-size: 3rem;
   color: #999;
 }
-/* ✅ Keyword section - upper left corner */
+/* Keyword section - upper left corner */
 .news-card__keyword {
   position: absolute;
   top: 12px;
@@ -61,7 +63,6 @@
   font-size: 12px;
   font-weight: 700;
   color: #1a1a1a;
-  z-index: 10;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -84,7 +85,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  z-index: 10;
+
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -122,16 +123,12 @@
   height: 24px;
 }
 
-/* ✅ Keep SVG support for backward compatibility */
 .news-card__save-icon svg {
   width: 20px;
   height: 20px;
   display: block;
 }
 
-/* src/components/NewsCard/NewsCard.css */
-
-/* ✅ Tooltip - positioned to the left of the icon (matching design) */
 .news-card__tooltip {
   position: absolute;
   top: 50%;
@@ -157,7 +154,6 @@
     transform 0.25s ease;
 }
 
-/* ✅ Show tooltip on hover with slide effect */
 .news-card__save-icon:hover .news-card__tooltip {
   opacity: 1;
   visibility: visible;
@@ -180,21 +176,20 @@
   font-weight: 700;
 }
 
-/* Content */
 .news-card__content {
-  padding: 1.25rem 1.5rem 1.5rem;
+  padding: 20px 24px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .news-card__date {
   font-size: 18px;
   color: #b6bcbf;
   font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
   margin: 0;
-  line-height: 1.4;
+  line-height: 24px;
 }
 
 .news-card__title {
@@ -220,6 +215,7 @@
 }
 
 .news-card__description {
+  padding: 16px 0;
   font-size: 16px;
   line-height: 22px;
   font-weight: 400;
@@ -249,58 +245,152 @@
   color: #2f71e5;
 }
 
-/* Responsive */
+/* Responsive - Tablet */
 @media (max-width: 768px) {
+  .news-card__title {
+    font-size: 22px;
+    line-height: 26px;
+  }
+
+  .news-card__description {
+    font-size: 15px;
+    line-height: 20px;
+  }
+
+  .news-card__date {
+    font-size: 16px;
+  }
+
+  .news-card__source {
+    font-size: 14px;
+  }
+
+  .news-card {
+    width: 224px;
+    height: 420px;
+  }
   .news-card__content {
     padding: 1rem;
   }
 
   .news-card__title {
-    font-size: 1rem;
+    font-size: 18px;
+    line-height: 22px;
+    margin: 10px 0;
   }
 
   .news-card__description {
-    font-size: 0.85rem;
+    font-size: 14px;
+    line-height: 18px;
+    -webkit-line-clamp: 2;
+  }
+
+  .news-card__date {
+    font-size: 14px;
+  }
+
+  .news-card__source {
+    font-size: 12px;
   }
 
   .news-card__save-icon {
     top: 8px;
     right: 8px;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
   }
 
   .news-card__icon {
-    width: 16px;
-    height: 16px;
+    width: 40px;
+    height: 40px;
   }
 
   .news-card__icon_delete {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
-  .news-card__save-icon svg {
-    width: 24px;
-    height: 24px;
+  .news-card__keyword {
+    width: 117px;
+    height: 40px;
+    text-align: center;
+    align-content: center;
+    top: 8px;
+    left: 8px;
+    font-size: 14px;
+    font-weight: 500;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 320px) {
+  .news-card {
+    width: 288px;
+    height: 450px;
+  }
   .news-card__image-wrapper {
-    padding-top: 66.67%; /* 3:2 aspect ratio for mobile */
+    padding-top: 66.67%;
   }
 
   .news-card__content {
-    padding: 0.75rem;
+    padding: 16px;
   }
 
   .news-card__title {
-    font-size: 0.95rem;
+    font-size: 22px;
+    line-height: 24px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    margin: 10px 0;
   }
 
   .news-card__description {
-    font-size: 0.8rem;
-    -webkit-line-clamp: 2;
+    font-size: 16px;
+    line-height: 22px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    padding-bottom: 8px;
+  }
+
+  .news-card__date {
+    font-size: 18px;
+  }
+
+  .news-card__source {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  .news-card__save-icon {
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .news-card__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .news-card__icon_delete {
+    width: 18px;
+    height: 18px;
+  }
+
+  .news-card__keyword {
+    padding: 14px 10px;
+    height: 40px;
+    text-align: center;
+    top: 16px;
+    left: 16px;
+    font-size: 14px;
+  }
+
+  .news-card__tooltip {
+    font-size: 0.65rem;
+    padding: 6px 10px;
   }
 }

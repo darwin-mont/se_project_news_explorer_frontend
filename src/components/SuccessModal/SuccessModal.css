@@ -57,7 +57,7 @@
   color: #013590;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 320px) {
   .success-modal__content {
     padding: 2rem 1.5rem;
     margin: 1rem;

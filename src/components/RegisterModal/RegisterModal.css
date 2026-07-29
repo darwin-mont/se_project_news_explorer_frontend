@@ -11,23 +11,55 @@
   font-weight: 500;
 }
 
+/* Input fields - clean with border-bottom */
 .register-modal__input {
-  padding: 0.8rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 0.5rem 0;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
   font-size: 1rem;
   transition: border-color 0.3s;
-  background: #ffffff;
+  background: transparent;
+  outline: none;
+  width: 100%;
 }
 
 .register-modal__input:focus {
   outline: none;
-  border-color: #2f71e5;
-  box-shadow: 0 0 0 3px rgba(47, 113, 229, 0.1);
+  border-bottom-color: #2f71e5;
+  box-shadow: none;
+}
+
+/* Error state - red underline */
+.register-modal__input_error {
+  border-bottom-color: #ff4444;
+}
+
+.register-modal__input_error:focus {
+  border-bottom-color: #ff4444;
 }
 
 .register-modal__input::placeholder {
   color: #bbb;
+  font-weight: 300;
+}
+
+/* Error message */
+.register-modal__error {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+/* General error (API error) */
+.register-modal__general-error {
+  background: #fde8e8;
+  color: #c62828;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 .register-modal__footer {
@@ -56,4 +88,16 @@
 .register-modal__switch-button:hover {
   color: #347eff;
   text-decoration: underline;
+}
+
+/* Mobile styles */
+@media (max-width: 320px) {
+  .register-modal__input {
+    font-size: 1rem;
+    padding: 0.6rem 0;
+  }
+
+  .register-modal__label {
+    font-size: 0.8rem;
+  }
 }

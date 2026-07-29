@@ -70,7 +70,6 @@ export function getItems() {
   });
 }
 
-// Save an article for the current user
 export function saveArticle(article) {
   return new Promise((resolve, reject) => {
     delay(600).then(() => {
@@ -95,6 +94,7 @@ export function saveArticle(article) {
         image: article.image || article.urlToImage || '',
         source: article.source || article.source?.name || 'Unknown Source',
         keyword: article.keyword || 'General',
+        searchTerm: article.searchTerm || article.keyword || 'General', // ✅ Add this line
         owner: {
           _id: getCurrentUserId() || 'unknown',
           name: 'User',
@@ -109,7 +109,6 @@ export function saveArticle(article) {
   });
 }
 
-//Remove an article for the current user
 export function removeArticle(articleId) {
   return new Promise((resolve, reject) => {
     delay(400).then(() => {
@@ -152,7 +151,6 @@ export function getArticleById(articleId) {
   });
 }
 
-// Clear all saved articles for the current user
 export function clearSavedArticles() {
   return new Promise((resolve) => {
     delay(200).then(() => {

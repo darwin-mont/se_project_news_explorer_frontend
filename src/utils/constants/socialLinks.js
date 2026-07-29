@@ -23,25 +23,10 @@ export const FOOTER_LINKS = {
   company: [
     { label: 'About Us', path: '/about' },
     { label: 'Careers', path: '/careers' },
-    { label: 'Blog', path: '/blog' },
-    { label: 'Press', path: '/press' },
   ],
-  product: [
-    { label: 'Features', path: '/features' },
-    { label: 'Pricing', path: '/pricing' },
-    { label: 'Integrations', path: '/integrations' },
-    { label: 'Roadmap', path: '/roadmap' },
-  ],
+
   support: [
     { label: 'Help Center', path: '/help' },
     { label: 'Contact Us', path: '/contact' },
-    { label: 'FAQ', path: '/faq' },
-    { label: 'Community', path: '/community' },
-  ],
-  legal: [
-    { label: 'Privacy Policy', path: '/privacy' },
-    { label: 'Terms of Service', path: '/terms' },
-    { label: 'Cookie Policy', path: '/cookies' },
-    { label: 'Security', path: '/security' },
   ],
 };

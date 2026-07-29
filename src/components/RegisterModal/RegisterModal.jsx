@@ -1,30 +1,79 @@
 import React, { useState } from 'react';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
+import {
+  validateRegisterForm,
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} from '../../utils/validation';
 import './RegisterModal.css';
 
 function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [generalError, setGeneralError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    setTimeout(() => {
-      onRegister({ email, password, username });
-      setIsLoading(false);
+    //  Validate form
+    const validationErrors = validateRegisterForm(email, password, username);
+    setErrors(validationErrors);
+    setTouched({ email: true, password: true, username: true });
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    setIsLoading(true);
+    setGeneralError('');
+
+    try {
+      await onRegister({ email, password, username });
       setEmail('');
       setPassword('');
       setUsername('');
-    }, 500);
+      setErrors({});
+      setTouched({});
+    } catch (error) {
+      setGeneralError(error.message || 'Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSubmit(e);
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (touched.email) {
+      const error = validateEmail(value);
+      setErrors({ ...errors, email: error });
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    if (touched.password) {
+      const error = validatePassword(value);
+      setErrors({ ...errors, password: error });
+    }
+  };
+
+  const handleUsernameChange = (e) => {
+    const value = e.target.value;
+    setUsername(value);
+    if (touched.username) {
+      const error = validateUsername(value);
+      setErrors({ ...errors, username: error });
     }
   };
 
@@ -46,45 +95,56 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
       }
     >
       <div className="register-modal__field">
+        <label className="register-modal__label">Username</label>
+        <input
+          type="text"
+          className={`register-modal__input ${errors.username && touched.username ? 'register-modal__input_error' : ''}`}
+          placeholder="Enter your username"
+          value={username}
+          onChange={handleUsernameChange}
+          onBlur={() => handleBlur('username')}
+          required
+          autoFocus={isOpen}
+        />
+        {errors.username && touched.username && (
+          <span className="register-modal__error">{errors.username}</span>
+        )}
+      </div>
+
+      <div className="register-modal__field">
         <label className="register-modal__label">Email</label>
         <input
           type="email"
-          className="register-modal__input"
+          className={`register-modal__input ${errors.email && touched.email ? 'register-modal__input_error' : ''}`}
           placeholder="Enter your email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handleEmailChange}
+          onBlur={() => handleBlur('email')}
           required
         />
+        {errors.email && touched.email && (
+          <span className="register-modal__error">{errors.email}</span>
+        )}
       </div>
 
       <div className="register-modal__field">
         <label className="register-modal__label">Password</label>
         <input
           type="password"
-          className="register-modal__input"
-          placeholder="Enter your password"
+          className={`register-modal__input ${errors.password && touched.password ? 'register-modal__input_error' : ''}`}
+          placeholder="Enter your password (min 8 characters)"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handlePasswordChange}
+          onBlur={() => handleBlur('password')}
           required
           minLength="8"
         />
+        {errors.password && touched.password && (
+          <span className="register-modal__error">{errors.password}</span>
+        )}
       </div>
 
-      <div className="register-modal__field">
-        <label className="register-modal__label">Username</label>
-        <input
-          type="text"
-          className="register-modal__input"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          onKeyDown={handleKeyDown}
-          required
-          autoFocus={isOpen}
-        />
-      </div>
+      {generalError && <div className="register-modal__general-error">{generalError}</div>}
     </ModalWithForm>
   );
 }

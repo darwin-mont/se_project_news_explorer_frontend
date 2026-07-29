@@ -13,16 +13,13 @@ function About() {
           <p className="about__text">
             Hello! My name is Darwin, and I'm a tech enthusiast with a passion for both software and
             hardware. I currently work as a freelancer, specializing in web development with HTML,
-            CSS, JavaScript, React, and Node.js. I'm driven by curiosity and believe in learning
-            something new every single day. Nice to meet you!
+            CSS, JavaScript, React, and Node.js.
           </p>
           <p className="about__text">
             At TripleTen the education emphasis on contemporary tech stacks and proven software
             development practices as core components of its curriculum. These methodologies are not
             only relevant within the classroom but are also highly transferable to the wider
-            technology industry. When implemented effectively, they enable organizations to keep
-            their customers’ technology infrastructure up to date and drive meaningful improvements
-            in overall performance.
+            technology industry.
           </p>
         </div>
       </div>

@@ -10,12 +10,11 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer__container">
-        <p className="footer__text">© {currentYear} Supersite, Powered by News API</p>
-        <div className="footer__links">
-          <Link to="/" className="footer__link">
-            Home
-          </Link>
-          <div className="footer__tripleten-wrapper">
+        <div className="footer__top-row">
+          <div className="footer__links">
+            <Link to="/" className="footer__link">
+              Home
+            </Link>
             <a
               href="https://tripleten.com"
               target="_blank"
@@ -24,14 +23,17 @@ function Footer() {
             >
               TripleTen
             </a>
+          </div>
+
+          <div className="footer__link-icons">
             <a
               href="https://github.com/darwin-mont"
               target="_blank"
               rel="noopener noreferrer"
-              className="footer__linkedin-link"
+              className="footer__github-link"
               aria-label="GitHub Profile"
             >
-              <img src={gitHubIcon} alt="GitHub" className="footer__linkedin-icon" />
+              <img src={gitHubIcon} alt="GitHub" className="footer__link-icon" />
             </a>
             <a
               href="https://www.linkedin.com/in/darwin-montaleza-b93b9b9a"
@@ -40,10 +42,12 @@ function Footer() {
               className="footer__linkedin-link"
               aria-label="LinkedIn Profile"
             >
-              <img src={linkedinIcon} alt="LinkedIn" className="footer__linkedin-icon" />
+              <img src={linkedinIcon} alt="LinkedIn" className="footer__link-icon" />
             </a>
           </div>
         </div>
+
+        <p className="footer__text">© {currentYear} Supersite, Powered by News API</p>
       </div>
     </footer>
   );

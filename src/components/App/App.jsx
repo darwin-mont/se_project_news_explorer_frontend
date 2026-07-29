@@ -36,7 +36,6 @@ function App() {
     }
   };
 
-  // Check for existing token on mount
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log('Token found:', token);
@@ -46,7 +45,6 @@ function App() {
           console.log('Token check response:', res);
           setCurrentUser(res.data);
           setIsLoggedIn(true);
-          // Load saved articles
           loadSavedArticles();
         })
         .catch((error) => {
@@ -57,20 +55,14 @@ function App() {
     }
   }, []);
 
-  // Clear search results when leaving the home page
   useEffect(() => {
-    // When navigating away from home page, clear search
     if (location.pathname !== '/') {
       setSearchQuery('');
     }
   }, [location.pathname]);
 
-  // Clear search results when refreshing the page
-  // This runs on mount and clears any stale search
   useEffect(() => {
-    // If we're on the home page and there's a search query from previous session, clear it
     if (location.pathname === '/') {
-      // Only clear if it was a page refresh (performance navigation)
       const navigationType = performance?.getEntriesByType?.('navigation')?.[0]?.type;
       if (navigationType === 'reload' || navigationType === 'back_forward') {
         setSearchQuery('');

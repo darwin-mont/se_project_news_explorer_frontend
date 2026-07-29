@@ -1,3 +1,4 @@
+// src/components/NewsCard/NewsCard.jsx
 import React, { useState } from 'react';
 import './NewsCard.css';
 import bookmarkNormal from '../../assets/icons/bookmark-normal.svg';
@@ -51,231 +52,20 @@ function NewsCard({ article, isLoggedIn, isSaved, onSave, variant = 'default' })
 
   const isDeleteVariant = variant === 'delete';
 
-  // Helper function to capitalize first letter
-  const capitalizeFirst = (str) => {
-    if (!str) return 'General';
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
-
+  //  Fixed: Define getKeyword function
   const getKeyword = () => {
-    const validCategories = [
-      'technology',
-      'science',
-      'health',
-      'business',
-      'environment',
-      'entertainment',
-      'sports',
-      'education',
-      'politics',
-      'world',
-      'general',
-    ];
-
-    if (article.keyword && validCategories.includes(article.keyword.toLowerCase())) {
-      return capitalizeFirst(article.keyword);
+    if (article.keyword) return article.keyword;
+    if (article.originalArticle?.keyword) return article.originalArticle.keyword;
+    if (article.section) return article.section;
+    if (article.category) return article.category;
+    // Fallback: extract from title
+    const titleWords = article.title?.split(' ') || [];
+    if (titleWords.length > 0) {
+      return titleWords.slice(0, 2).join(' ');
     }
-
-    if (
-      article.originalArticle?.keyword &&
-      validCategories.includes(article.originalArticle.keyword.toLowerCase())
-    ) {
-      return capitalizeFirst(article.originalArticle.keyword);
-    }
-
-    if (article.section && validCategories.includes(article.section.toLowerCase())) {
-      return capitalizeFirst(article.section);
-    }
-
-    if (article.category && validCategories.includes(article.category.toLowerCase())) {
-      return capitalizeFirst(article.category);
-    }
-
-    // Try to extract from title using category keywords
-    const titleText = article.title?.toLowerCase() || '';
-    const descriptionText = article.description?.toLowerCase() || '';
-    const combinedText = titleText + ' ' + descriptionText;
-
-    const categoryPatterns = [
-      {
-        category: 'Technology',
-        keywords: [
-          'tech',
-          'software',
-          'ai',
-          'digital',
-          'computer',
-          'internet',
-          'app',
-          'code',
-          'programming',
-          'cyber',
-          'data',
-          'robot',
-        ],
-      },
-      {
-        category: 'Science',
-        keywords: [
-          'science',
-          'research',
-          'discovery',
-          'scientist',
-          'lab',
-          'experiment',
-          'space',
-          'nasa',
-          'physics',
-          'biology',
-          'chemistry',
-        ],
-      },
-      {
-        category: 'Health',
-        keywords: [
-          'health',
-          'medical',
-          'doctor',
-          'hospital',
-          'disease',
-          'treatment',
-          'cancer',
-          'heart',
-          'wellness',
-          'fitness',
-          'nutrition',
-        ],
-      },
-      {
-        category: 'Business',
-        keywords: [
-          'business',
-          'economy',
-          'market',
-          'finance',
-          'bank',
-          'invest',
-          'stock',
-          'trade',
-          'company',
-          'profit',
-          'ceo',
-        ],
-      },
-      {
-        category: 'Environment',
-        keywords: [
-          'environment',
-          'climate',
-          'green',
-          'solar',
-          'energy',
-          'renewable',
-          'nature',
-          'wildlife',
-          'pollution',
-          'conservation',
-        ],
-      },
-      {
-        category: 'Entertainment',
-        keywords: [
-          'entertainment',
-          'movie',
-          'music',
-          'film',
-          'celebrity',
-          'show',
-          'hollywood',
-          'netflix',
-          'actor',
-          'singer',
-        ],
-      },
-      {
-        category: 'Sports',
-        keywords: [
-          'sports',
-          'football',
-          'basketball',
-          'soccer',
-          'baseball',
-          'tennis',
-          'golf',
-          'olympic',
-          'nfl',
-          'nba',
-          'athlete',
-        ],
-      },
-      {
-        category: 'Education',
-        keywords: [
-          'education',
-          'school',
-          'university',
-          'student',
-          'teacher',
-          'college',
-          'learn',
-          'curriculum',
-          'academic',
-        ],
-      },
-      {
-        category: 'Politics',
-        keywords: [
-          'politics',
-          'government',
-          'election',
-          'president',
-          'congress',
-          'senate',
-          'policy',
-          'vote',
-        ],
-      },
-      {
-        category: 'World',
-        keywords: ['world', 'global', 'international', 'foreign', 'europe', 'asia', 'africa'],
-      },
-    ];
-
-    for (const pattern of categoryPatterns) {
-      for (const keyword of pattern.keywords) {
-        if (combinedText.includes(keyword)) {
-          return pattern.category;
-        }
-      }
-    }
-
-    const sourceName = article.source?.name?.toLowerCase() || '';
-    const sourceCategoryMap = {
-      tech: 'Technology',
-      innovation: 'Technology',
-      science: 'Science',
-      health: 'Health',
-      medical: 'Health',
-      business: 'Business',
-      finance: 'Business',
-      economy: 'Business',
-      environment: 'Environment',
-      nature: 'Environment',
-      entertainment: 'Entertainment',
-      sports: 'Sports',
-      education: 'Education',
-      politics: 'Politics',
-      world: 'World',
-    };
-
-    for (const [sourceKeyword, category] of Object.entries(sourceCategoryMap)) {
-      if (sourceName.includes(sourceKeyword)) {
-        return category;
-      }
-    }
-
-    return 'General';
+    return 'News';
   };
+
   // Determine which bookmark icon to show
   const getBookmarkIcon = () => {
     if (isSaved) return bookmarkMarked;
@@ -302,6 +92,7 @@ function NewsCard({ article, isLoggedIn, isSaved, onSave, variant = 'default' })
           </div>
         )}
 
+        {/* Keyword section - ONLY on saved news page (delete variant) */}
         {isDeleteVariant && <div className="news-card__keyword">{getKeyword()}</div>}
 
         {/* Save/Delete Icon */}
@@ -340,6 +131,7 @@ function NewsCard({ article, isLoggedIn, isSaved, onSave, variant = 'default' })
             />
           )}
 
+          {/* Tooltip */}
           {isLoggedIn && (
             <div className="news-card__tooltip">
               {isDeleteVariant
@@ -355,6 +147,7 @@ function NewsCard({ article, isLoggedIn, isSaved, onSave, variant = 'default' })
         </div>
       </div>
 
+      {/* Content */}
       <div className="news-card__content">
         <p className="news-card__date">{formatDate(article.publishedAt)}</p>
         <h3 className="news-card__title">

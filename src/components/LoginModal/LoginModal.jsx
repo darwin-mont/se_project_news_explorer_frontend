@@ -1,31 +1,62 @@
+// src/components/LoginModal/LoginModal.jsx
 import React, { useState } from 'react';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
+import { validateLoginForm } from '../../utils/validation';
 import './LoginModal.css';
 
 function LoginModal({ isOpen, onClose, onLogin, onSwitchToRegister }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [generalError, setGeneralError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    // Simulate login
-    setTimeout(() => {
-      onLogin({ email, password });
-      setIsLoading(false);
-      // Clear form
+    //  Validate form
+    const validationErrors = validateLoginForm(email, password);
+    setErrors(validationErrors);
+    setTouched({ email: true, password: true });
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    setIsLoading(true);
+    setGeneralError('');
+
+    try {
+      await onLogin({ email, password });
       setEmail('');
       setPassword('');
-    }, 500);
+      setErrors({});
+      setTouched({});
+    } catch (error) {
+      setGeneralError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Handle Enter key to submit form
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSubmit(e);
+  const handleBlur = (field) => {
+    setTouched({ ...touched, [field]: true });
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (touched.email) {
+      const error = validateEmail(e.target.value);
+      setErrors({ ...errors, email: error });
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (touched.password) {
+      const error = validatePassword(e.target.value);
+      setErrors({ ...errors, password: error });
     }
   };
 
@@ -50,29 +81,36 @@ function LoginModal({ isOpen, onClose, onLogin, onSwitchToRegister }) {
         <label className="login-modal__label">Email</label>
         <input
           type="email"
-          className="login-modal__input"
+          className={`login-modal__input ${errors.email && touched.email ? 'login-modal__input_error' : ''}`}
           placeholder="Enter your email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handleEmailChange}
+          onBlur={() => handleBlur('email')}
           required
           autoFocus={isOpen}
         />
+        {errors.email && touched.email && (
+          <span className="login-modal__error">{errors.email}</span>
+        )}
       </div>
 
       <div className="login-modal__field">
         <label className="login-modal__label">Password</label>
         <input
           type="password"
-          className="login-modal__input"
+          className={`login-modal__input ${errors.password && touched.password ? 'login-modal__input_error' : ''}`}
           placeholder="Enter your password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onChange={handlePasswordChange}
+          onBlur={() => handleBlur('password')}
           required
-          minLength="6"
         />
+        {errors.password && touched.password && (
+          <span className="login-modal__error">{errors.password}</span>
+        )}
       </div>
+
+      {generalError && <div className="login-modal__general-error">{generalError}</div>}
     </ModalWithForm>
   );
 }

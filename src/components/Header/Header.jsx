@@ -1,4 +1,3 @@
-// src/components/Header/Header.jsx
 import React from 'react';
 import Navigation from '../Navigation/Navigation';
 import SearchForm from '../SearchForm/SearchForm';
@@ -18,245 +17,23 @@ function Header({
   const isHomePage = currentPath === '/';
   const isSavedNewsPage = currentPath === '/saved-news';
 
-  // ✅ Helper function to extract proper category keywords
-  const extractKeyword = (article) => {
-    // Valid categories list
-    const validCategories = [
-      'technology',
-      'science',
-      'health',
-      'business',
-      'environment',
-      'entertainment',
-      'sports',
-      'education',
-      'politics',
-      'world',
-      'general',
-    ];
-
-    // Check article keyword
-    if (article.keyword && validCategories.includes(article.keyword.toLowerCase())) {
-      return capitalizeFirst(article.keyword);
-    }
-
-    if (
-      article.originalArticle?.keyword &&
-      validCategories.includes(article.originalArticle.keyword.toLowerCase())
-    ) {
-      return capitalizeFirst(article.originalArticle.keyword);
-    }
-
-    if (article.section && validCategories.includes(article.section.toLowerCase())) {
-      return capitalizeFirst(article.section);
-    }
-
-    if (article.category && validCategories.includes(article.category.toLowerCase())) {
-      return capitalizeFirst(article.category);
-    }
-
-    // Try to extract from title using category keywords
-    const titleText = article.title?.toLowerCase() || '';
-    const descriptionText = article.description?.toLowerCase() || '';
-    const combinedText = titleText + ' ' + descriptionText;
-
-    const categoryPatterns = [
-      {
-        category: 'Technology',
-        keywords: [
-          'tech',
-          'software',
-          'ai',
-          'digital',
-          'computer',
-          'internet',
-          'app',
-          'code',
-          'programming',
-          'cyber',
-          'data',
-          'robot',
-        ],
-      },
-      {
-        category: 'Science',
-        keywords: [
-          'science',
-          'research',
-          'discovery',
-          'scientist',
-          'lab',
-          'experiment',
-          'space',
-          'nasa',
-          'physics',
-          'biology',
-          'chemistry',
-        ],
-      },
-      {
-        category: 'Health',
-        keywords: [
-          'health',
-          'medical',
-          'doctor',
-          'hospital',
-          'disease',
-          'treatment',
-          'cancer',
-          'heart',
-          'wellness',
-          'fitness',
-          'nutrition',
-        ],
-      },
-      {
-        category: 'Business',
-        keywords: [
-          'business',
-          'economy',
-          'market',
-          'finance',
-          'bank',
-          'invest',
-          'stock',
-          'trade',
-          'company',
-          'profit',
-          'ceo',
-        ],
-      },
-      {
-        category: 'Environment',
-        keywords: [
-          'environment',
-          'climate',
-          'green',
-          'solar',
-          'energy',
-          'renewable',
-          'nature',
-          'wildlife',
-          'pollution',
-          'conservation',
-        ],
-      },
-      {
-        category: 'Entertainment',
-        keywords: [
-          'entertainment',
-          'movie',
-          'music',
-          'film',
-          'celebrity',
-          'show',
-          'hollywood',
-          'netflix',
-          'actor',
-          'singer',
-        ],
-      },
-      {
-        category: 'Sports',
-        keywords: [
-          'sports',
-          'football',
-          'basketball',
-          'soccer',
-          'baseball',
-          'tennis',
-          'golf',
-          'olympic',
-          'nfl',
-          'nba',
-          'athlete',
-        ],
-      },
-      {
-        category: 'Education',
-        keywords: [
-          'education',
-          'school',
-          'university',
-          'student',
-          'teacher',
-          'college',
-          'learn',
-          'curriculum',
-          'academic',
-        ],
-      },
-      {
-        category: 'Politics',
-        keywords: [
-          'politics',
-          'government',
-          'election',
-          'president',
-          'congress',
-          'senate',
-          'policy',
-          'vote',
-        ],
-      },
-      {
-        category: 'World',
-        keywords: ['world', 'global', 'international', 'foreign', 'europe', 'asia', 'africa'],
-      },
-    ];
-
-    for (const pattern of categoryPatterns) {
-      for (const keyword of pattern.keywords) {
-        if (combinedText.includes(keyword)) {
-          return pattern.category;
-        }
-      }
-    }
-
-    // Try using the source name
-    const sourceName = article.source?.name?.toLowerCase() || '';
-    const sourceCategoryMap = {
-      tech: 'Technology',
-      innovation: 'Technology',
-      science: 'Science',
-      health: 'Health',
-      medical: 'Health',
-      business: 'Business',
-      finance: 'Business',
-      economy: 'Business',
-      environment: 'Environment',
-      nature: 'Environment',
-      entertainment: 'Entertainment',
-      sports: 'Sports',
-      education: 'Education',
-      politics: 'Politics',
-      world: 'World',
-    };
-
-    for (const [sourceKeyword, category] of Object.entries(sourceCategoryMap)) {
-      if (sourceName.includes(sourceKeyword)) {
-        return category;
-      }
-    }
-
-    return 'General';
-  };
-
-  // Helper function to capitalize first letter
-  const capitalizeFirst = (str) => {
-    if (!str) return 'General';
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  };
-
-  // ✅ Get unique keywords from saved articles using the category extractor
   const getUniqueKeywords = () => {
     const keywords = savedArticles
       .map((article) => {
-        return extractKeyword(article);
+        if (article.searchTerm) return article.searchTerm;
+        if (article.originalArticle?.searchTerm) return article.originalArticle.searchTerm;
+
+        if (article.keyword) return article.keyword;
+        if (article.originalArticle?.keyword) return article.originalArticle.keyword;
+
+        const titleWords = article.title?.split(' ') || [];
+        if (titleWords.length > 0) {
+          return titleWords.slice(0, 2).join(' ');
+        }
+        return 'General';
       })
       .filter(Boolean);
 
-    // Get unique keywords (limit to 3 for display)
     const unique = [...new Set(keywords)];
     return unique.slice(0, 3);
   };

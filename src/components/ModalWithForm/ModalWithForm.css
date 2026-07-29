@@ -25,14 +25,15 @@
 .modal__wrapper {
   position: relative;
   display: inline-block;
+  width: 100%;
+  max-width: 430px;
 }
 
 .modal__content {
   background: #ffffff;
   border-radius: 16px;
   padding: 2rem;
-  width: 430px;
-
+  width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   animation: slideDown 0.3s ease;
@@ -49,9 +50,10 @@
   }
 }
 
+/* Close Button - Desktop (outside) */
 .modal__close-button {
   position: absolute;
-  top: -50px;
+  top: -12px;
   right: -50px;
   background: none;
   border: none;
@@ -70,8 +72,8 @@
 }
 
 .modal__close-icon {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   display: block;
   opacity: 0.8;
   transition: opacity 0.2s ease;
@@ -124,7 +126,6 @@
   cursor: not-allowed;
 }
 
-/* Footer */
 .modal__footer {
   margin-top: 1.5rem;
   text-align: center;
@@ -132,7 +133,7 @@
   color: #666;
 }
 
-/* Custom scrollbar for modal content */
+/* Custom scrollbar */
 .modal__content::-webkit-scrollbar {
   width: 4px;
 }
@@ -151,35 +152,101 @@
   background: #a8a8a8;
 }
 
-@media (max-width: 768px) {
+/* Desktop - Keep close button outside */
+@media (min-width: 768px) {
+  .modal__wrapper {
+    max-width: 430px;
+  }
+
+  .modal__content {
+    border-radius: 16px;
+    padding: 2rem;
+    animation: slideDown 0.3s ease;
+  }
+
+  .modal {
+    align-items: center;
+    padding: 1rem;
+  }
+
   .modal__close-button {
-    top: -40px;
-    right: 0;
+    position: relative;
+    top: 0;
+    left: 430px;
+    padding: 0;
   }
 
   .modal__close-icon {
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
+    filter: brightness(0) saturate(100%) invert(1);
   }
 }
-
-@media (max-width: 480px) {
+@media (max-width: 320px) {
+  .modal {
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
   .modal__content {
-    padding: 1.5rem;
-    margin: 1rem;
+    width: 320px;
+    height: 560px;
+    position: fixed;
+    margin: 0;
+    padding: 16px;
+    height: 560px;
+
+    animation: slideUp 0.3s ease;
+    border-radius: 16px;
+  }
+
+  .modal__wrapper {
+    width: 320px;
+    padding: 50px 0;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
   }
 
   .modal__title {
     font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal__close-button:hover .modal__close-icon {
+    opacity: 1;
   }
 
   .modal__close-button {
-    top: -36px;
-    right: 0;
+    top: 16px;
+    right: 16px;
+    position: absolute;
+    padding: 0;
   }
 
   .modal__close-icon {
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .modal__submit-button {
+    width: 288px;
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .modal__footer {
+    font-size: 14px;
+    margin-top: 1rem;
   }
 }
