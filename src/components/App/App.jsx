@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
@@ -126,7 +126,7 @@ function App() {
       setCurrentUser(null);
       setSavedArticles([]);
       localStorage.removeItem('token');
-
+      setSearchQuery(''); //
       console.log('Logged out');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -235,6 +235,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
       <Footer />

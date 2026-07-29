@@ -5,6 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .navigation_dark {
@@ -91,7 +92,6 @@
 
 .navigation__button {
   width: 176px;
-
   height: 48px;
   padding: 0px 30px;
   border-radius: 30px;
@@ -233,7 +233,7 @@
 }
 
 /* Mobile - Hamburger visible, dropdown menu */
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .navigation {
     background: transparent;
     border-bottom: 1px solid #d1d2d6 !important;
@@ -480,8 +480,7 @@
   }
 }
 
-/* Small Mobile (320px) - Compact layout */
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .navigation__header {
     padding: 6px 12px;
   }

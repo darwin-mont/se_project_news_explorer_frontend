@@ -109,10 +109,12 @@
 @media (max-width: 480px), (max-width: 320px) {
   .search-form__wrapper {
     padding: 32px 0;
+    width: auto;
   }
 
   .search-form {
     flex-direction: column;
+    align-items: center;
     overflow: visible;
     box-shadow: none;
     background: transparent;

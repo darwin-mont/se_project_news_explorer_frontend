@@ -171,7 +171,7 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .header {
     min-height: auto;
   }
