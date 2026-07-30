@@ -490,13 +490,14 @@
   }
 
   .navigation__list {
-    padding: 12px;
+    padding: 16px;
     gap: 8px;
   }
 
   .navigation__link {
-    font-size: 16px;
-    padding: 6px 0;
+    font-size: 18px;
+    padding: 12px 0;
+    font-weight: 500;
   }
 
   .navigation__button {
@@ -505,20 +506,21 @@
     font-size: 18px;
     font-weight: 500;
     padding: 4px 10px;
+    margin: 0;
   }
 
   .navigation__logout-icon {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
   }
 
   .navigation__menu-icon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 
   .navigation__close-icon {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 }

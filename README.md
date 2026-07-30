@@ -16,4 +16,4 @@ project and some challenges I faced while building it.
 
 ## Site Deploy
 
-Link to Site deployed [NewsExplorer](https://darwin-mont.github.io/se_project_news_explorer_frontend/), you can check the website in the link above.
+Link to Site deployed [NewsExplorer](https://darwin-mont.github.io/se_project_news_explorer_frontend/), you can check the website in the link.

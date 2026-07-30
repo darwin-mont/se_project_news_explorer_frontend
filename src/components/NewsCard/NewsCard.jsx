@@ -1,4 +1,3 @@
-// src/components/NewsCard/NewsCard.jsx
 import React, { useState } from 'react';
 import './NewsCard.css';
 import bookmarkNormal from '../../assets/icons/bookmark-normal.svg';
@@ -52,13 +51,15 @@ function NewsCard({ article, isLoggedIn, isSaved, onSave, variant = 'default' })
 
   const isDeleteVariant = variant === 'delete';
 
-  //  Fixed: Define getKeyword function
   const getKeyword = () => {
+    if (article.searchTerm) return article.searchTerm;
+    if (article.originalArticle?.searchTerm) return article.originalArticle.searchTerm;
+
     if (article.keyword) return article.keyword;
     if (article.originalArticle?.keyword) return article.originalArticle.keyword;
     if (article.section) return article.section;
     if (article.category) return article.category;
-    // Fallback: extract from title
+
     const titleWords = article.title?.split(' ') || [];
     if (titleWords.length > 0) {
       return titleWords.slice(0, 2).join(' ');

@@ -1,14 +1,11 @@
 import { mockArticles } from './mockData';
 
-// Simulate API delay
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Get the current user ID from localStorage
 const getCurrentUserId = () => {
   const token = localStorage.getItem('token');
   if (!token) return null;
 
-  // Try to get user data from localStorage
   try {
     const userData = localStorage.getItem('user_data_' + token);
     if (userData) {
@@ -18,10 +15,8 @@ const getCurrentUserId = () => {
   } catch {
     return null;
   }
-  return null;
 };
 
-// Get saved articles for the current user
 const getSavedArticlesFromStorage = () => {
   const userId = getCurrentUserId();
   if (!userId) return [];
@@ -47,11 +42,9 @@ const saveArticlesToStorage = (articles) => {
 // Initialize from localStorage for current user
 let savedArticles = getSavedArticlesFromStorage();
 
-// Get all saved articles for the current user
 export function getItems() {
   return new Promise((resolve) => {
     delay(500).then(() => {
-      // Refresh from localStorage to ensure latest data
       savedArticles = getSavedArticlesFromStorage();
 
       const formattedArticles = savedArticles.map((article) => ({
@@ -63,6 +56,7 @@ export function getItems() {
         image: article.image || article.urlToImage || '',
         source: article.source || article.source?.name || 'Unknown Source',
         keyword: article.keyword || 'General',
+        searchTerm: article.searchTerm || article.keyword || 'General', //
         originalArticle: article.originalArticle || article,
       }));
       resolve(formattedArticles);
@@ -73,10 +67,8 @@ export function getItems() {
 export function saveArticle(article) {
   return new Promise((resolve, reject) => {
     delay(600).then(() => {
-      // Refresh from localStorage
       savedArticles = getSavedArticlesFromStorage();
 
-      // Check if article already exists
       const exists = savedArticles.some((saved) => saved.url === article.url);
 
       if (exists) {
@@ -84,7 +76,6 @@ export function saveArticle(article) {
         return;
       }
 
-      // Create saved article with _id
       const savedArticle = {
         _id: 'saved_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
         title: article.title || 'Untitled Article',
@@ -94,7 +85,7 @@ export function saveArticle(article) {
         image: article.image || article.urlToImage || '',
         source: article.source || article.source?.name || 'Unknown Source',
         keyword: article.keyword || 'General',
-        searchTerm: article.searchTerm || article.keyword || 'General', // ✅ Add this line
+        searchTerm: article.searchTerm || article.keyword || 'General',
         owner: {
           _id: getCurrentUserId() || 'unknown',
           name: 'User',
@@ -109,10 +100,10 @@ export function saveArticle(article) {
   });
 }
 
+// Remove an article
 export function removeArticle(articleId) {
   return new Promise((resolve, reject) => {
     delay(400).then(() => {
-      // Refresh from localStorage
       savedArticles = getSavedArticlesFromStorage();
 
       const index = savedArticles.findIndex((article) => article._id === articleId);
@@ -136,7 +127,6 @@ export function removeArticle(articleId) {
 export function getArticleById(articleId) {
   return new Promise((resolve, reject) => {
     delay(300).then(() => {
-      // Refresh from localStorage
       savedArticles = getSavedArticlesFromStorage();
 
       const article = savedArticles.find((article) => article._id === articleId);
@@ -151,6 +141,7 @@ export function getArticleById(articleId) {
   });
 }
 
+// Clear all saved articles
 export function clearSavedArticles() {
   return new Promise((resolve) => {
     delay(200).then(() => {
@@ -161,7 +152,7 @@ export function clearSavedArticles() {
   });
 }
 
-// Get count of saved articles for the current user
+// Get count of saved articles
 export function getSavedArticlesCount() {
   savedArticles = getSavedArticlesFromStorage();
   return savedArticles.length;

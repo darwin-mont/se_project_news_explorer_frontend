@@ -181,12 +181,13 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .main {
     padding: 0;
   }
 
   .main__results {
+    justify-items: center;
     grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
     gap: 10px;
   }

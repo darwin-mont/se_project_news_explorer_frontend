@@ -156,7 +156,7 @@
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .saved-news {
     padding: 24px 16px;
     margin: 0;
