@@ -1,7 +1,6 @@
-// src/components/LoginModal/LoginModal.jsx
 import React, { useState } from 'react';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
-import { validateLoginForm } from '../../utils/validation';
+import { validateLoginForm, validateEmail, validatePassword } from '../../utils/validation';
 import './LoginModal.css';
 
 function LoginModal({ isOpen, onClose, onLogin, onSwitchToRegister }) {
@@ -45,17 +44,19 @@ function LoginModal({ isOpen, onClose, onLogin, onSwitchToRegister }) {
   };
 
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const value = e.target.value;
+    setEmail(value);
     if (touched.email) {
-      const error = validateEmail(e.target.value);
+      const error = validateEmail(value);
       setErrors({ ...errors, email: error });
     }
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    const value = e.target.value;
+    setPassword(value);
     if (touched.password) {
-      const error = validatePassword(e.target.value);
+      const error = validatePassword(value);
       setErrors({ ...errors, password: error });
     }
   };
