@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './ModalWithForm.css';
 import closeIcon from '../../assets/icons/close.svg';
+import { useModalClose } from '../../utils/hooks/useModalClose';
 
 function ModalWithForm({
   isOpen,
@@ -12,31 +13,9 @@ function ModalWithForm({
   isLoading,
   footerContent,
 }) {
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const { handleOverlayClick } = useModalClose({ isOpen, onClose });
 
   if (!isOpen) return null;
-
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   return (
     <div className="modal" onClick={handleOverlayClick}>

@@ -1,33 +1,11 @@
 import React, { useEffect } from 'react';
+import { useModalClose } from '../../utils/hooks/useModalClose';
 import './SuccessModal.css';
 
 function SuccessModal({ isOpen, onClose, onSignIn }) {
-  // Handle ESC key press
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const { handleOverlayClick } = useModalClose({ isOpen, onClose });
 
   if (!isOpen) return null;
-
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   return (
     <div className="success-modal" onClick={handleOverlayClick}>
