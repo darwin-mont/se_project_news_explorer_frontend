@@ -154,6 +154,10 @@
 
 /* Desktop - Keep close button outside */
 @media (min-width: 768px) {
+  .modal {
+    align-items: center;
+    padding: 34px;
+  }
   .modal__wrapper {
     max-width: 430px;
   }
@@ -162,11 +166,6 @@
     border-radius: 16px;
     padding: 2rem;
     animation: slideDown 0.3s ease;
-  }
-
-  .modal {
-    align-items: center;
-    padding: 1rem;
   }
 
   .modal__close-button {
@@ -182,7 +181,7 @@
     filter: brightness(0) saturate(100%) invert(1);
   }
 }
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .modal {
     padding: 0;
     position: absolute;
@@ -193,20 +192,18 @@
     animation: fadeIn 0.2s ease;
   }
   .modal__content {
-    width: 320px;
-    height: 560px;
-    position: fixed;
+    width: 100%;
+    height: 568px;
+    position: relative;
     margin: 0;
     padding: 16px;
-    height: 560px;
-
     animation: slideUp 0.3s ease;
     border-radius: 16px;
   }
 
   .modal__wrapper {
-    width: 320px;
-    padding: 50px 0;
+    padding: 56px 0 0;
+    position: fixed;
   }
 
   @keyframes slideUp {
@@ -219,8 +216,11 @@
   }
 
   .modal__title {
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem;
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+  .modal__form {
+    gap: 30px;
   }
 
   .modal__close-button:hover .modal__close-icon {
@@ -235,12 +235,13 @@
   }
 
   .modal__close-icon {
-    width: 24px;
-    height: 24px;
+    width: 34px;
+    height: 34px;
   }
 
   .modal__submit-button {
-    width: 288px;
+    width: 100%;
+    height: 64px;
     padding: 16px;
     font-size: 14px;
   }

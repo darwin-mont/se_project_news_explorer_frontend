@@ -7,7 +7,7 @@
 
 .register-modal__label {
   font-size: 0.85rem;
-  color: #666;
+  color: #2f71e5;
   font-weight: 500;
 }
 
@@ -91,13 +91,13 @@
 }
 
 /* Mobile styles */
-@media (max-width: 320px) {
+@media (max-width: 480px), (max-width: 320px) {
   .register-modal__input {
-    font-size: 1rem;
+    font-size: 14px;
     padding: 0.6rem 0;
   }
 
   .register-modal__label {
-    font-size: 0.8rem;
+    font-size: 12px;
   }
 }

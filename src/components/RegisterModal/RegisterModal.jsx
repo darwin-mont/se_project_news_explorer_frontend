@@ -1,31 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
-import {
-  validateRegisterForm,
-  validateEmail,
-  validatePassword,
-  validateUsername,
-} from '../../utils/validation';
+import { validateEmail, validatePassword, validateUsername } from '../../utils/validation';
+import { useFormAndValidation } from '../../utils/hooks/useFormAndValidation';
 import './RegisterModal.css';
 
 function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [errors, setErrors] = useState({});
+  const { values, handleChange, errors, isValid, resetForm, setErrors } = useFormAndValidation();
+
   const [touched, setTouched] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
 
+  useEffect(() => {
+    if (!isOpen) {
+      resetForm({}, {}, false);
+      setTouched({});
+      setGeneralError('');
+      setErrors({});
+    }
+  }, [isOpen, resetForm, setErrors]);
+
+  const validateField = (name, value) => {
+    let error = '';
+    if (name === 'email') {
+      error = validateEmail(value);
+    } else if (name === 'password') {
+      error = validatePassword(value);
+    } else if (name === 'username') {
+      error = validateUsername(value);
+    }
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched({ ...touched, [name]: true });
+    validateField(name, value);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    handleChange(e);
+    if (touched[name]) {
+      validateField(name, value);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //  Validate form
-    const validationErrors = validateRegisterForm(email, password, username);
-    setErrors(validationErrors);
     setTouched({ email: true, password: true, username: true });
 
-    if (Object.keys(validationErrors).length > 0) {
+    const emailError = validateEmail(values.email || '');
+    const passwordError = validatePassword(values.password || '');
+    const usernameError = validateUsername(values.username || '');
+
+    setErrors({
+      email: emailError,
+      password: passwordError,
+      username: usernameError,
+    });
+
+    if (emailError || passwordError || usernameError) {
       return;
     }
 
@@ -33,47 +69,18 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
     setGeneralError('');
 
     try {
-      await onRegister({ email, password, username });
-      setEmail('');
-      setPassword('');
-      setUsername('');
-      setErrors({});
+      await onRegister({
+        email: values.email,
+        password: values.password,
+        username: values.username,
+      });
+      resetForm({}, {}, false);
       setTouched({});
+      setErrors({});
     } catch (error) {
       setGeneralError(error.message || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleBlur = (field) => {
-    setTouched({ ...touched, [field]: true });
-  };
-
-  const handleEmailChange = (e) => {
-    const value = e.target.value;
-    setEmail(value);
-    if (touched.email) {
-      const error = validateEmail(value);
-      setErrors({ ...errors, email: error });
-    }
-  };
-
-  const handlePasswordChange = (e) => {
-    const value = e.target.value;
-    setPassword(value);
-    if (touched.password) {
-      const error = validatePassword(value);
-      setErrors({ ...errors, password: error });
-    }
-  };
-
-  const handleUsernameChange = (e) => {
-    const value = e.target.value;
-    setUsername(value);
-    if (touched.username) {
-      const error = validateUsername(value);
-      setErrors({ ...errors, username: error });
     }
   };
 
@@ -98,11 +105,12 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
         <label className="register-modal__label">Username</label>
         <input
           type="text"
+          name="username"
           className={`register-modal__input ${errors.username && touched.username ? 'register-modal__input_error' : ''}`}
           placeholder="Enter your username"
-          value={username}
-          onChange={handleUsernameChange}
-          onBlur={() => handleBlur('username')}
+          value={values.username || ''}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
           required
           autoFocus={isOpen}
         />
@@ -115,11 +123,12 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
         <label className="register-modal__label">Email</label>
         <input
           type="email"
+          name="email"
           className={`register-modal__input ${errors.email && touched.email ? 'register-modal__input_error' : ''}`}
           placeholder="Enter your email"
-          value={email}
-          onChange={handleEmailChange}
-          onBlur={() => handleBlur('email')}
+          value={values.email || ''}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
           required
         />
         {errors.email && touched.email && (
@@ -131,11 +140,12 @@ function RegisterModal({ isOpen, onClose, onRegister, onSwitchToLogin }) {
         <label className="register-modal__label">Password</label>
         <input
           type="password"
+          name="password"
           className={`register-modal__input ${errors.password && touched.password ? 'register-modal__input_error' : ''}`}
           placeholder="Enter your password (min 8 characters)"
-          value={password}
-          onChange={handlePasswordChange}
-          onBlur={() => handleBlur('password')}
+          value={values.password || ''}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
           required
           minLength="8"
         />

@@ -6,6 +6,8 @@
 .main__results-title {
   font-size: 40px;
   font-weight: 400;
+  line-height: 46px;
+  letter-spacing: 0px;
   color: #1a1a1a;
   font-family: 'Roboto Slab', serif;
   margin: 64px 0;
@@ -66,8 +68,8 @@
 
 .main__results {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   margin: 62px 0;
 }
 
@@ -140,17 +142,18 @@
     padding: 0;
   }
   .main__results {
-    grid-template-columns: repeat(auto-fill, minmax(224px, 3fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     margin: 32px 0;
+    overflow: hidden;
   }
 
   .main__results-title {
-    padding-top: 80px;
-    font-size: 40px;
+    padding-top: 40px;
     margin: 0;
+    font-size: 30px;
     font-weight: 400;
-    line-height: 46px;
+    line-height: 34px;
     letter-spacing: 0px;
     text-align: left;
   }
@@ -181,6 +184,15 @@
   }
 }
 
+@media (max-width: 767px) {
+  .main__results {
+    justify-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 0;
+  }
+}
+
 @media (max-width: 480px), (max-width: 320px) {
   .main {
     padding: 0;
@@ -188,18 +200,13 @@
 
   .main__results {
     justify-items: center;
-    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+    grid-template-columns: repeat(1, 1fr);
     gap: 10px;
+    margin: 0;
   }
 
   .main__results-title {
-    font-size: 30px;
-    font-weight: 400;
-    line-height: 34px;
-    letter-spacing: 0px;
-    text-align: left;
     padding: 32px 0 58px;
-    margin: 0;
   }
   .search-results {
     padding: 0 16px;

@@ -101,3 +101,12 @@
     font-size: 12px;
   }
 }
+
+@media (max-width: 480px), (max-width: 320px) {
+  .login-modal__label {
+    font-size: 12px;
+  }
+  .login-modal__input {
+    font-size: 14px;
+  }
+}

@@ -91,23 +91,22 @@
 }
 
 .navigation__button {
-  width: 176px;
-  height: 48px;
-  padding: 0px 30px;
+  width: 100%;
+  padding: 12px 40px;
   border-radius: 30px;
   font-size: 18px;
   font-weight: 500;
+  letter-spacing: 0px;
   cursor: pointer;
   border: none;
   transition: all 0.3s;
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Roboto', serif;
   border: 1px solid #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
-  margin-left: 8px;
 }
 
 .navigation__button_login {
@@ -225,10 +224,9 @@
   }
 
   .navigation__button {
-    width: 152px;
-    height: 40px;
-    padding: 8px 15px;
-    font-size: 16px;
+    width: 100%;
+    height: 48px;
+    font-size: 18px;
   }
 }
 
@@ -302,18 +300,15 @@
     border-bottom-color: #1a1a1a !important;
   }
 
-  /* On saved news page - button should have black border */
   .navigation_dark .navigation__button {
     border: 1px solid rgba(26, 26, 26, 0.3) !important;
     color: #1a1a1a !important;
   }
 
-  /* On saved news page - logout icon should be black */
   .navigation_dark .navigation__logout-icon {
     filter: brightness(0) saturate(100%) invert(0) !important;
   }
 
-  /* When menu opens on saved news page - switch to dark */
   .navigation_dark:has(.navigation__list_open) {
     background: #1a1b22 !important;
     border-bottom: none !important;
@@ -487,6 +482,9 @@
 
   .navigation__logo {
     font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0px;
   }
 
   .navigation__list {

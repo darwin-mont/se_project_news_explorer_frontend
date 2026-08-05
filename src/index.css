@@ -155,3 +155,18 @@ img {
     display: block;
   }
 }
+
+/* src/index.css - Add this at the top */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ✅ Prevent horizontal scroll on all pages */
+html,
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
